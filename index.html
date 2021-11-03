@@ -1,46 +1,68 @@
 <!DOCTYPE html>
 <html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DCC138 Exemplo01</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>DCC138 Exemplo01</h1>
     <canvas></canvas>
     <p>por Thiago Jose Lopes (2021)</p>
     <script>
-        let canvas = document.querySelector("canvas");
-        let ctx = canvas.getContext("2d");
-        canvas.width = 480;
-        canvas.height = 320;
-        let x = 150;
-        let y = 100;
-        let a = 0;
-        let t0;
-        let dt;
+      let canvas = document.querySelector("canvas");
+      let ctx = canvas.getContext("2d");
+      canvas.width = 480;
+      canvas.height = 320;
+      let x = 150;
+      let vx = 0;
+      let y = 100;
+      let vy = 0;
+      let t0;
+      let dt;
+      requestAnimationFrame(desenha);
+
+      function desenha(t) {
+        t0 = t0 ?? t;
+        dt = (t - t0) / 1000;
+        //Desenha elementos
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        //Atualiza dinâmica dos estados
+        x = x + vx * dt;
+        y = y + vy * dt;
+
+        //Desenha elementos
+        ctx.fillStyle = "white";
+        ctx.fillRect(x, y, 20, 20);
+
         requestAnimationFrame(desenha);
+        t0 = t;
+      }
 
-        function desenha(t){
-            t0 = t0 ?? t;
-            dt = (t - t0)/1000;
-            //Desenha elementos
-            ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+      addEventListener("keydown", teclaPressionada);
+      //Adiciona controle de velocidades
+      function teclaPressionada(e) {
+        switch (e.key) {
+          case "ArrowUp":
+            vy = -20;
+            break;
+          case "ArrowDown":
+            vy = +20;
+            break;
+          case "ArrowLeft":
+            vx = -20;
+            break;
+          case "ArrowRight":
+            vx = +20;
+            break;
 
-            //Atualiza estados
-            a = a + 2*Math.PI*dt;
-            x = 150 + 100*Math.cos(a);
-            y = y + 5*dt;
-
-            //Desenha elementos
-            ctx.fillStyle = "white";
-            ctx.fillRect(x, y, 20, 20);
-
-            requestAnimationFrame(desenha);
-            t0 = t;
+          default:
+            break;
         }
+      }
     </script>
-</body>
+  </body>
 </html>
